@@ -16,7 +16,6 @@
 # useful for stderr output
 #from __future__ import print_function
 import sys
-from math import sqrt
  
 # define a manual message
 manual = "Usage :\n\t$ python faces.py train facit test\n train : training files,\n facit : the training solution\n test : file for test\n"
@@ -29,12 +28,12 @@ manual = "Usage :\n\t$ python faces.py train facit test\n train : training files
 """
 def print_img( img_name, img ):
     txt = img_name != ' :\n'
-        idx = int(sqrt( len(img) ))
-        for i in range( idx ):
-            txt += str( img[ i * idx ] )
-            for j in range( idx ):
-                txt += ', ' + str( img[ i * idx + j] )
-            txt += '\n'
+    idx = int (math.sqrt( len( img ) ) )
+    for i in range( idx ):
+        txt += str( img[ i * idx ] )
+        for j in range( idx ):
+            txt += ', ' + str( img[ i * idx + j] )
+        txt += '\n'
     return txt
 
 """
