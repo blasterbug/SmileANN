@@ -1,4 +1,4 @@
-# SmileANN
+# SmileANN [![Build Status](https://travis-ci.org/blasterbug/SmileANN.svg)](https://travis-ci.org/blasterbug/SmileANN)
 Recognize faces with Artificial Neuronal Network.  
 Yet another job for UmU, see [project].
 
