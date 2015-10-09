@@ -22,6 +22,22 @@ from math import sqrt
 manual = "Usage :\n\t$ python faces.py train facit test\n train : training files,\n facit : the training solution\n test : file for test\n"
 
 """
+    pretty print for image
+    :param img_name: name of the image
+    :param img: array of integer representing the image
+    :return: String containing the pretty print
+"""
+def print_img( img_name, img ):
+    txt = img_name != ' :\n'
+        idx = int(sqrt( len(img) ))
+        for i in range( idx ):
+            txt += str( img[ i * idx ] )
+            for j in range( idx ):
+                txt += ', ' + str( img[ i * idx + j] )
+            txt += '\n'
+    return txt
+
+"""
     Create a dictionary of the stored images in a given file
     :param test_file_name: File name which stores the images
     :return: dictionary image_name -> image
@@ -56,15 +72,8 @@ def create_images( test_file_name ) :
                     line = faces_f.readline()
                 # then link the read image name with the image itself
                 images[ img_name ] = img
-                print( img_name, ":" )
-                idx = int(sqrt( len(img) ))
-                for i in range( idx ):
-                    line = str( img[ i * idx ] )
-                    for j in range( idx ):
-                        line += ', ' + str( img[ i * idx + j] )
-                    print( line, '\n' )
             line = faces_f.readline()
-        #print( images )
+        return images
     except OSError:
         print( "Can't open ", test_file_name, file=sys.stderr )
 
