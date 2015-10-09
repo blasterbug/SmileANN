@@ -10,20 +10,21 @@
   * 3: Mischievous >)
   * 4: Mad >(
  The files containing images ***must*** use the given format, the name of the 
- image follow by the pixel greyscale value for each pixels.
+ image follow by the pixel grey-scale value for each pixels.
 """
 
-# usefull for stderr output
+# useful for stderr output
 #from __future__ import print_function
 import sys
-
-# define a manuel message
-manuel = "Usage :\n\t$ python faces.py train facit test\n train : training files,\n facit : the training facit\n test : file for test\n"
+from math import sqrt
+ 
+# define a manual message
+manual = "Usage :\n\t$ python faces.py train facit test\n train : training files,\n facit : the training solution\n test : file for test\n"
 
 """
     Create a dictionary of the stored images in a given file
     :param test_file_name: File name which stores the images
-    :return: dictionnary image_name -> image
+    :return: dictionary image_name -> image
 """
 def create_images( test_file_name ) :
     try :
@@ -40,22 +41,30 @@ def create_images( test_file_name ) :
             if line.startswith( 'I' ):
                 # create a new entry for the dictionary
                 img_name = line.replace( '\n', '' )
-                # then the next lines are the image
+                # then the next lines are the image grey pixels value
                 line = faces_f.readline()
-                pixels = line.split()
-                print( pixels )
-                img = [[]]
+                # convert string values on the line to integers
+                pixels = [ int( x ) for x in line.split() ]
+                # the image is a array in a vector
+                img = [ 0 for i in range( len( pixels) * len( pixels ) )]
                 # while the line contains digits 
-                for raw in range( len( pixels ) ):
+                for row in range( len( pixels ) ):
                     # matrix in a vector
                     for colum in range( len( pixels ) ):
                         # put the raw of the image in an array
-                        img[raw] = colum
+                        img[row * len( pixels ) + colum ] = pixels[colum]
                     line = faces_f.readline()
                 # then link the read image name with the image itself
                 images[ img_name ] = img
+                print( img_name, ":" )
+                idx = int(sqrt( len(img) ))
+                for i in range( idx ):
+                    line = str( img[ i * idx ] )
+                    for j in range( idx ):
+                        line += ', ' + str( img[ i * idx + j] )
+                    print( line, '\n' )
             line = faces_f.readline()
-        print( images )
+        #print( images )
     except OSError:
         print( "Can't open ", test_file_name, file=sys.stderr )
 
@@ -73,6 +82,6 @@ if __name__ == "__main__" :
     if len( sys.argv ) == 4 :
         main( sys.argv )
     else :
-        #sys.stderr.write('Bad call\n' + manuel)
-        print( "Bad call\n", manuel, file=sys.stderr )
+        #sys.stderr.write('Bad call\n' + manual)
+        print( "Bad call\n", manual, file=sys.stderr )
 
