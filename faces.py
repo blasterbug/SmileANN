@@ -14,8 +14,9 @@
 """
 
 # useful for stderr output
-#from __future__ import print_function
+from __future__ import print_function
 import sys
+from math import sqrt
  
 # define a manual message
 manual = "Usage :\n\t$ python faces.py train facit test\n train : training files,\n facit : the training solution\n test : file for test\n"
@@ -27,11 +28,11 @@ manual = "Usage :\n\t$ python faces.py train facit test\n train : training files
     :return: String containing the pretty print
 """
 def print_img( img_name, img ):
-    txt = img_name != ' :\n'
-    idx = int (math.sqrt( len( img ) ) )
+    txt = img_name + '\n'
+    idx = int ( sqrt( len( img ) ) )
     for i in range( idx ):
         txt += str( img[ i * idx ] )
-        for j in range( idx ):
+        for j in range( 1, idx ):
             txt += ', ' + str( img[ i * idx + j] )
         txt += '\n'
     return txt
@@ -60,15 +61,19 @@ def create_images( test_file_name ) :
                 line = faces_f.readline()
                 # convert string values on the line to integers
                 pixels = [ int( x ) for x in line.split() ]
-                # the image is a array in a vector
+                # initiate an array in a vector to put the image in
                 img = [ 0 for i in range( len( pixels) * len( pixels ) )]
                 # while the line contains digits 
                 for row in range( len( pixels ) ):
+                    # convert string values on the line to integers
+                    pixels = [ int( x ) for x in line.split() ]
                     # matrix in a vector
                     for colum in range( len( pixels ) ):
-                        # put the raw of the image in an array
-                        img[row * len( pixels ) + colum ] = pixels[colum]
+                        # put the raw of the image in the array
+                        img[ row * len( pixels ) + colum ] = pixels[colum]
+                    # then the next lines are the image grey pixels value
                     line = faces_f.readline()
+                line = faces_f.readline()
                 # then link the read image name with the image itself
                 images[ img_name ] = img
             line = faces_f.readline()
@@ -83,7 +88,9 @@ def create_facit( facit_file_name ):
         print( "Can't open ", fl, file=sys.stderr )
 
 def main( argv ) :
-    create_images( argv[1] )
+    imgs = create_images( argv[1] )
+    for img in imgs :
+        print( print_img( img, imgs[img] ) )
 
 if __name__ == "__main__" :
     # require 3 arguments
