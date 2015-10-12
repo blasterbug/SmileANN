@@ -1,32 +1,38 @@
 #!/usr/bin/python3
 # -*- coding: utf-8 -*-
+
 """
- Benjamin Sientzoff
- 2015/10/08
- A row of Artificial Neuronal Network (ANN)
- to recognize smiley faces as follow :
-  * 1: Happy :) 
-  * 2: Sad :(
-  * 3: Mischievous >)
-  * 4: Mad >(
- The files containing images ***must*** use the given format, the name of the 
- image follow by the pixel grey-scale value for each pixels.
+A row of Artificial Neuronal Network (ANN)
+to recognize smiley faces as follow :
+ * 1: Happy :) 
+ * 2: Sad :(
+ * 3: Mischievous >)
+ * 4: Mad >(
+The files containing images ***must*** use the given format, the name 
+of the image follow by the pixel grey-scale value for each pixels.
 """
 
+__author__ = 'Benjamin Sientzoff'
+__date__ = '10 october 2015'
+__version__ = '0.1b'
+
+
 # useful for stderr output
-from __future__ import print_function
+#from __future__ import print_function
 import sys
 from math import sqrt
  
-# define a manual message
-manual = "Usage :\n\t$ python faces.py train facit test\n train : training files,\n facit : the training solution\n test : file for test\n"
-
 """
+define a manual message
+"""
+manual = "\nUsage :\n $ python faces.py train facit test\n train: the training set\n facit: the training solution\n test : file for test\n"
+
+def read_images( test_file_name ) :
+    """
     Create a dictionary to stored images from a given file
     :param test_file_name: File name which stores the images
     :return: dictionary image_name -> image
-"""
-def read_images( test_file_name ) :
+    """
     try :
         # open the files
         faces_f = open( test_file_name, 'r' )
@@ -64,15 +70,16 @@ def read_images( test_file_name ) :
             line = faces_f.readline()
         return images
     except OSError:
-        print( "Can't open ", test_file_name, file=sys.stderr )
+        #print( "Can't open " + test_file_name, sys.stderr )
+        print( "Can't open " + test_file_name )
 
-"""
+def read_facit( facit_file_name ):
+    """
     Get the answer of a test and store it in a dictionary
     :param facit_file_name: name of the file containing 
         answer of the training set
     :return: dictionary storing for each images the answer
-"""
-def read_facit( facit_file_name ):
+    """
     try :
         # open the file
         facit_f = open( facit_file_name, 'r' )
@@ -88,23 +95,20 @@ def read_facit( facit_file_name ):
                 facit[ words[0] ] = int( words[1] )
         return facit
     except IOError:
-        print( "Can't open ", facit_file_name, file=sys.stderr )
+        #print( "Can't open " + test_file_name, file=sys.stderr )
+        print( "Can't open " + test_file_name )
 
-def main( argv ) :
-
-    # get the images for the training set
-    training = read_images( argv[1] )
-    # get the answers for the training set
-    facit = read_facit( argv[2] )
-    # get the images for the test
-#    test =read_images( argv[3] )
-    
 
 if __name__ == "__main__" :
     # require 3 arguments
     if len( sys.argv ) == 4 :
-        main( sys.argv )
+        # get the images for the training set
+        training = read_images( sys.argv[1] )
+        # get the answers for the training set
+        facit = read_facit( sys.argv[2] )
+        # get the images for the test
+        #test =read_images( sys.argv[3] )
     else :
-        #sys.stderr.write('Bad call\n' + manual)
-        print( "Bad call\n", manual, file=sys.stderr )
+        #print( "Bad call\n" + manual, file=sys.stderr )
+        print( manual )
 
