@@ -22,30 +22,15 @@ from math import sqrt
 manual = "Usage :\n\t$ python faces.py train facit test\n train : training files,\n facit : the training solution\n test : file for test\n"
 
 """
-    pretty print for image
-    :param img_name: name of the image
-    :param img: array of integer representing the image
-    :return: String containing the pretty print
-"""
-def print_img( img_name, img ):
-    txt = img_name + '\n'
-    idx = int ( sqrt( len( img ) ) )
-    for i in range( idx ):
-        txt += str( img[ i * idx ] )
-        for j in range( 1, idx ):
-            txt += ', ' + str( img[ i * idx + j] )
-        txt += '\n'
-    return txt
-
-"""
-    Create a dictionary of the stored images in a given file
+    Create a dictionary to stored images from a given file
     :param test_file_name: File name which stores the images
     :return: dictionary image_name -> image
 """
-def create_images( test_file_name ) :
+def read_images( test_file_name ) :
     try :
         # open the files
         faces_f = open( test_file_name, 'r' )
+        # start read the file
         line = faces_f.readline()
         # create a dictionary
         images = {}
@@ -81,16 +66,39 @@ def create_images( test_file_name ) :
     except OSError:
         print( "Can't open ", test_file_name, file=sys.stderr )
 
-def create_facit( facit_file_name ):
+"""
+    Get the answer of a test and store it in a dictionary
+    :param facit_file_name: name of the file containing 
+        answer of the training set
+    :return: dictionary storing for each images the answer
+"""
+def read_facit( facit_file_name ):
     try :
-        facit_f = open( fl, 'r' )
-    except OSError:
-        print( "Can't open ", fl, file=sys.stderr )
+        # open the file
+        facit_f = open( facit_file_name, 'r' )
+        # initiate a dictionary
+        facit = {}
+        # for each line
+        for line in facit_f :
+            # if the line contains a image name and the answer
+            if line.startswith("I"):
+                words = line.split()
+                # create an entry in the dictionary with the image name
+                # and convert to integer the answer associated
+                facit[ words[0] ] = int( words[1] )
+        return facit
+    except IOError:
+        print( "Can't open ", facit_file_name, file=sys.stderr )
 
 def main( argv ) :
-    imgs = create_images( argv[1] )
-    for img in imgs :
-        print( print_img( img, imgs[img] ) )
+
+    # get the images for the training set
+    training = read_images( argv[1] )
+    # get the answers for the training set
+    facit = read_facit( argv[2] )
+    # get the images for the test
+#    test =read_images( argv[3] )
+    
 
 if __name__ == "__main__" :
     # require 3 arguments
