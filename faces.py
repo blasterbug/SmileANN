@@ -87,7 +87,7 @@ def read_facit( facit_file_name ):
                 # and convert to integer the answer associated
                 facit[ words[0] ] = int( words[1] )
         return facit
-    except IOError:
+    except OSError:
         print( "Can't open ", facit_file_name, file=sys.stderr )
 
 def main( argv ) :
