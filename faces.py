@@ -2,13 +2,13 @@
 # -*- coding: utf-8 -*-
 
 """
-A row of Artificial Neuronal Network (ANN)
+A row of Artificial Neural Network (ANN)
 to recognize smiley faces as follow :
- * 1: Happy :) 
+ * 1: Happy :)
  * 2: Sad :(
  * 3: Mischievous >)
  * 4: Mad >(
-The files containing images ***must*** use the given format, the name 
+The files containing images ***must*** use the given format, the name
 of the image follow by the pixel grey-scale value for each pixels.
 """
 
@@ -19,13 +19,69 @@ __version__ = '0.1b'
 
 # useful for stderr output
 #from __future__ import print_function
-import sys
-from math import sqrt
- 
+import sys, random
+from math import tanh
+
 """
-define a manual message
+define a help message
 """
-manual = "\nUsage :\n $ python faces.py train facit test\n train: the training set\n facit: the training solution\n test : file for test\n"
+help = "\nUsage :\n $ python faces.py train facit test\n train: the training set\n facit: the training solution\n test : file for test\n"
+
+
+class neuron :
+    """
+        Define neurons for a Artificial Neural Network
+    """
+    # weight of each input
+    def __init__( self, size ) :
+        """
+        Create a neuron
+        :param size: Size of the inputs
+        """
+        # give randomly weight to each synapses
+        self.synapses = [ random.uniform( -1., 1. ) for i in range( size ) ]
+    
+    def g( self, img ) :
+        """
+        activation function
+        :param img: Image to get the face from
+        :return: face detect by the neuron
+        """
+        # first compute the sum of the input, regarding weight of synapses
+        for i in range( len( img ) ) :
+            sumInput = img[i] * self.synapses[i]
+        return tanh( sumInput )
+    
+    def g_training( self, img ) :
+        """
+        define a function to train a neuron
+        """
+
+def train( ann, training_set, answers, error_level=40, learning_rate=60 ) :
+    """
+    Train an Artificial Neural Network
+    :param ann: Artificial Neural Network
+    :param training_set: List containing inputs for the training
+    :param answers: list containing the answers for the training set
+    :param error_level=40: Threshold to the error tolerance (in percent)
+    :param learning_rate=60: learning rate for the training (in percent)
+    """
+    error = 100
+    sum_error = 0
+    # while the error is "too huge"
+    while error > error_level :
+        # for each inputs
+        for key in training_set :
+            # for each neuron in the network
+            res = [ i for i in range( len( ann ) ) ]
+            for neuron in range( len( ann ) ) :
+                # process the inputs
+                res[neuron] = ann[neuron].g( training_set[key] )
+            # get the highest outputs
+            max_idx =  max(enumerate(res), key=(lambda x: x[1]))
+            error = max_idx[1] - float(answers[key])
+            print( error )
+        error = 0
 
 def read_images( test_file_name ) :
     """
@@ -54,7 +110,7 @@ def read_images( test_file_name ) :
                 pixels = [ int( x ) for x in line.split() ]
                 # initiate an array in a vector to put the image in
                 img = [ 0 for i in range( len( pixels) * len( pixels ) )]
-                # while the line contains digits 
+                # while the line contains digits
                 for row in range( len( pixels ) ):
                     # convert string values on the line to integers
                     pixels = [ int( x ) for x in line.split() ]
@@ -76,7 +132,7 @@ def read_images( test_file_name ) :
 def read_facit( facit_file_name ):
     """
     Get the answer of a test and store it in a dictionary
-    :param facit_file_name: name of the file containing 
+    :param facit_file_name: name of the file containing
         answer of the training set
     :return: dictionary storing for each images the answer
     """
@@ -101,14 +157,22 @@ def read_facit( facit_file_name ):
 
 if __name__ == "__main__" :
     # require 3 arguments
-    if len( sys.argv ) == 4 :
+    if 4 == len( sys.argv ) :
         # get the images for the training set
-        training = read_images( sys.argv[1] )
+        training_set = read_images( sys.argv[1] )
+        
         # get the answers for the training set
         facit = read_facit( sys.argv[2] )
+        
         # get the images for the test
-        #test =read_images( sys.argv[3] )
+        #test = read_images( sys.argv[3] )
+        
+        # create the four neurons with 400 inputs
+        ann = [ neuron( 400 ) for i in range( 4 ) ]
+        
+        # train the network
+        train( ann, training_set, facit )
+        
     else :
         #print( "Bad call\n" + manual, file=sys.stderr )
-        print( manual )
-
+        print( help )
