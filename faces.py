@@ -19,62 +19,15 @@ __author__ = 'Benjamin Sientzoff'
 __date__ = '20 October 2015'
 __version__ = '0.1b'
 
-
 # useful for stderr output
 #from __future__ import print_function
 import sys
-from math import exp, tanh
-from random import uniform
+from Neuron import Neuron
 
 """
 define a help message
 """
 help = "\nUsage :\n $ python faces.py train facit test\n train: the training set\n facit: the training solution\n test : file for test\n"
-
-def sigmoid( t ) :
-    """
-    
-    """
-    return 1. / ( 1. + exp( -t ) )
-
-class Neuron :
-    """
-        Define neurons for a Artificial Neural Network using  the 
-        McCulloch–Pitts (MCP) neuron model.
-    """
-    # weight of each input
-    def __init__( self, size ) :
-        """
-        Create a neuron
-        
-        :param size: Size of the inputs i.e. the number of synapses
-        """
-        # give randomly weight to each synapses
-        self.__synapses__ = [uniform( -1., 1. ) for i in range( size )]
-        
-    def g( self, input_set ) :
-        """
-        activation function
-        
-        :param input_set: Input to process
-        :return: activation state of the neuron
-        """
-        # first compute the sum of the input, regarding weight of synapses
-        for i in range( len( self.__synapses__ ) ) :
-            sum_input = input_set[i] * self.__synapses__[i]
-        #return sigmoid( sum_input )
-        return tanh( sum_input)
-    
-    def learn( self, inputs, error, learning_rate ) :
-        """
-        define a function to set the synapses weight
-        
-        :param value: proportional offset to use to set inputs sensitivity
-        :param error: error makes by the neuron
-        :param learning_rate: learning rate
-        """
-        for i in range( len( self.__synapses__ ) ) :
-            self.__synapses__[i] += inputs[i]*error*learning_rate
 
 class ANN :
     """
@@ -95,14 +48,14 @@ class ANN :
             res[i] = self.__ann__[i].g( image )
         return enumerate(res)
 
-    def train( self, training_set, answers, error_level=10, learning_rate=1 ) :
+    def train( self, training_set, answers, error_level=55, learning_rate=0.6 ) :
         """
         Train an Artificial Neural Network
         
         :param training_set: List containing inputs for the training
         :param answers: list containing the answers for the training set
         :param error_level: Threshold to the error tolerance (default 55%)
-        :param learning_rate: Learning rate for the training (default 0.7)
+        :param learning_rate: Learning rate for the training (default 0.6)
         """
         error_rate = 100
         sum_error,sum_test = 0., 0.
@@ -218,7 +171,8 @@ if __name__ == "__main__" :
         # get the answers for the training set
         facit = read_facit( sys.argv[2] )
         
-        train = [training_set[key] for key in training_set]
+        # define the size of the subset for training
+        size_subset = int(len( training_set ) / 10)
         
         # get the images for the test
         #test = read_images( sys.argv[3] )
@@ -227,6 +181,7 @@ if __name__ == "__main__" :
         ann = ANN()
         # train the network
         ann.train( training_set, facit )
+        
         # perform faces recognition
         #ann.test( test )
         
