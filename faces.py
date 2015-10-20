@@ -10,10 +10,13 @@ to recognize smiley faces as follow :
  * 4: Mad >(
 The files containing images ***must*** use the given format, the name
 of the image follow by the pixel grey-scale value for each pixels.
+
+Generate pydoc by running : 
+    $ pydoc -w faces
 """
 
 __author__ = 'Benjamin Sientzoff'
-__date__ = '10 october 2015'
+__date__ = '20 October 2015'
 __version__ = '0.1b'
 
 
@@ -29,6 +32,9 @@ define a help message
 help = "\nUsage :\n $ python faces.py train facit test\n train: the training set\n facit: the training solution\n test : file for test\n"
 
 def sigmoid( t ) :
+    """
+    
+    """
     return 1. / ( 1. + exp( -t ) )
 
 class Neuron :
@@ -61,7 +67,7 @@ class Neuron :
     
     def learn( self, inputs, error, learning_rate ) :
         """
-        define a function to set the synpases weight
+        define a function to set the synapses weight
         
         :param value: proportional offset to use to set inputs sensitivity
         :param error: error makes by the neuron
@@ -72,7 +78,7 @@ class Neuron :
 
 class ANN :
     """
-    Define an Aritficial Neuronal Network to recognize faces
+    Define an Artificial Neuronal Network to recognize faces
     """
     def __init__( self ):
         self.__ann__ = [Neuron(400) for i in range( 4 )]
@@ -89,13 +95,13 @@ class ANN :
             res[i] = self.__ann__[i].g( image )
         return enumerate(res)
 
-    def train( self, training_set, answers, error_level=70, learning_rate=0.8 ) :
+    def train( self, training_set, answers, error_level=10, learning_rate=1 ) :
         """
         Train an Artificial Neural Network
         
         :param training_set: List containing inputs for the training
         :param answers: list containing the answers for the training set
-        :param error_level: Threshold to the error tolerance (in percent)
+        :param error_level: Threshold to the error tolerance (default 55%)
         :param learning_rate: Learning rate for the training (default 0.7)
         """
         error_rate = 100
@@ -117,15 +123,15 @@ class ANN :
                     # adjust ann sensitivity according to the error
                     self.__ann__[ right_neuron ].learn( training_set[key], error, learning_rate )
                     sum_error += 1
-                print key, answers[key], better_neuron[0] + 1, error
+                print key, "  \t", answers[key], "\t" , better_neuron[0] + 1, "\t", error
             error_rate = int((sum_error / sum_test)*100)
-        print error_rate
+            print error_rate
         
     def test( self, test_set ) :
         """
         use the ANN
         
-        :param test_set: test set to be used on the ANN
+        :param test_set: the test set to be used on the ANN
         """
         for img in test_set :
             print( img, perform( self.__ann__, test_set[img] ) )
@@ -202,7 +208,6 @@ def read_facit( facit_file_name ):
     except OSError:
         #print( "Can't open " + test_file_name, file=sys.stderr )
         print( "Can't open " + test_file_name )
-    return n.g( img )
 
 if __name__ == "__main__" :
     # require 3 arguments
