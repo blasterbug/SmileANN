@@ -59,13 +59,16 @@ class Neuron :
         #return sigmoid( sum_input )
         return tanh( sum_input)
     
-    def learn( self, inputs ) :
+    def learn( self, inputs, error, learning_rate ) :
         """
         define a function to set the synpases weight
+        
         :param value: proportional offset to use to set inputs sensitivity
+        :param error: error makes by the neuron
+        :param learning_rate: learning rate
         """
         for i in range( len( self.__synapses__ ) ) :
-            self.__synapses__[i] += inputs[i]*0.4
+            self.__synapses__[i] += inputs[i]*error*learning_rate
 
 class ANN :
     """
@@ -86,20 +89,22 @@ class ANN :
             res[i] = self.__ann__[i].g( image )
         return enumerate(res)
 
-    def train( self, training_set, answers, error_level=45, learning_rate=.4 ) :
+    def train( self, training_set, answers, error_level=70, learning_rate=0.8 ) :
         """
         Train an Artificial Neural Network
         
         :param training_set: List containing inputs for the training
         :param answers: list containing the answers for the training set
         :param error_level: Threshold to the error tolerance (in percent)
-        :param learning_rate: learning rate for the training
+        :param learning_rate: Learning rate for the training (default 0.7)
         """
-        error = 100
+        error_rate = 100
+        sum_error,sum_test = 0., 0.
         # while the error is "too huge"
-        while error > error_level :
+        while error_rate > error_level :
             # for each inputs
             for key in training_set :
+                sum_test += 1
                 # index of the neuron supposed to be activated
                 right_neuron = answers[key] - 1
                 res = self.__perform__( training_set[key] )
@@ -109,12 +114,12 @@ class ANN :
                 if right_neuron != better_neuron[0] : 
                     # compute the error to the right answer
                     error = better_neuron[1] - answers[key]
-                    print( better_neuron[0], answers[key], error )
                     # adjust ann sensitivity according to the error
-                    self.__ann__[ right_neuron ].learn( training_set[key] )
-                else :
-                    print( key, answers[key], better_neuron[0] )
-            error = 0
+                    self.__ann__[ right_neuron ].learn( training_set[key], error, learning_rate )
+                    sum_error += 1
+                print key, answers[key], better_neuron[0] + 1, error
+            error_rate = int((sum_error / sum_test)*100)
+        print error_rate
         
     def test( self, test_set ) :
         """
@@ -208,13 +213,14 @@ if __name__ == "__main__" :
         # get the answers for the training set
         facit = read_facit( sys.argv[2] )
         
+        train = [training_set[key] for key in training_set]
+        
         # get the images for the test
         #test = read_images( sys.argv[3] )
         
         # create the ANN
         ann = ANN()
         # train the network
-        ann.train( training_set, facit )
         ann.train( training_set, facit )
         # perform faces recognition
         #ann.test( test )
