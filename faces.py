@@ -22,7 +22,7 @@ __version__ = '0.1b'
 # useful for stderr output
 #from __future__ import print_function
 import sys
-from Neuron import Neuron
+from neuron import Neuron
 
 """
 define a help message
@@ -72,13 +72,13 @@ class ANN :
                 # if the right neuron is not activated
                 if right_neuron != better_neuron[0] : 
                     # compute the error to the right answer
-                    error = better_neuron[1] - answers[key]
+                    error = 1 - better_neuron[1]
                     # adjust ann sensitivity according to the error
                     self.__ann__[ right_neuron ].learn( training_set[key], error, learning_rate )
                     sum_error += 1
-                print key, "  \t", answers[key], "\t" , better_neuron[0] + 1, "\t", error
+                print( key, "  \t", answers[key], "\t" , better_neuron[0] + 1 )
             error_rate = int((sum_error / sum_test)*100)
-            print error_rate
+            print( error_rate )
         
     def test( self, test_set ) :
         """

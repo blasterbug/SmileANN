@@ -41,29 +41,30 @@ class Neuron :
         self.__synapses__ = [uniform( -1., 1. ) for i in range( size )]
         
 
-    def g( self, input_set ) :
+    def g( self, inputs ) :
         """
         activation function
         
-        :param input_set: Input to process
+        :param inputs: the inputs to process
         :return: activation state of the neuron
         """
         # first compute the sum of the input, regarding weight of synapses
         for i in range( len( self.__synapses__ ) ) :
-            sum_input = input_set[i] * self.__synapses__[i]
-        #return sigmoid( sum_input )
-        return tanh( sum_input)
+            sum_input = inputs[i] * self.__synapses__[i]
+        return sigmoid( sum_input )
+        #return tanh( sum_input)
     
     def learn( self, inputs, error, learning_rate ) :
         """
         define a function to set the synapses weight
         
         :param value: proportional offset to use to set inputs sensitivity
-        :param error: error makes by the neuron
+        :param error: the error regarding inputs and desired ouput
         :param learning_rate: learning rate
         """
+        # for each synapses
         for i in range( len( self.__synapses__ ) ) :
-            print self.__synapses__[i] , inputs[i]
-            self.__synapses__[i] += abs(inputs[i] * error * learning_rate)
-            print self.__synapses__[i]
-
+            # set the sensitivity according to the input, the error 
+            # and the learning rate
+            self.__synapses__[i] += learning_rate * error * inputs[i]
+        
