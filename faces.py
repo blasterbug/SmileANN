@@ -16,12 +16,13 @@ Generate pydoc by running :
 """
 
 __author__ = 'Benjamin Sientzoff'
-__date__ = '20 October 2015'
-__version__ = '0.1b'
+__date__ = '21 October 2015'
+__version__ = '0.1'
 
 # useful for stderr output
 #from __future__ import print_function
 import sys
+import neuron
 from neuron import Neuron
 
 """
@@ -48,13 +49,13 @@ class ANN :
             res[i] = self.__ann__[i].g( image )
         return enumerate(res)
 
-    def train( self, training_set, answers, error_level=55, learning_rate=0.6 ) :
+    def train( self, training_set, answers, error_level=20, learning_rate=0.6 ) :
         """
         Train an Artificial Neural Network
         
         :param training_set: List containing inputs for the training
         :param answers: list containing the answers for the training set
-        :param error_level: Threshold to the error tolerance (default 55%)
+        :param error_level: Threshold to the error tolerance (default 20%)
         :param learning_rate: Learning rate for the training (default 0.6)
         """
         error_rate = 100
@@ -166,21 +167,31 @@ if __name__ == "__main__" :
     # require 3 arguments
     if 4 == len( sys.argv ) :
         # get the images for the training set
-        training_set = read_images( sys.argv[1] )
+        training_images = read_images( sys.argv[1] )
         
         # get the answers for the training set
         facit = read_facit( sys.argv[2] )
         
-        # define the size of the subset for training
-        size_subset = int(len( training_set ) / 10)
+        training_keys = [key for key in training_images]
         
-        # get the images for the test
-        #test = read_images( sys.argv[3] )
+        # define the size of the subset for training
+        size_subset = int(len( training_images ) / 10)
+        
+        # put training subsets in an array
+        training_subset = [{} for i in range( 10 )]
+        for i in range(10) :
+            training_subset[i] = {key : training_images[key] for key in training_keys[i:i+size_subset]}
         
         # create the ANN
         ann = ANN()
-        # train the network
-        ann.train( training_set, facit )
+        
+        # train the network for a subset
+        ann.train( training_subset[0], facit )
+        
+        ann.test( training_set[1] )
+        
+        # get the images for the test
+        #test = read_images( sys.argv[3] )
         
         # perform faces recognition
         #ann.test( test )
