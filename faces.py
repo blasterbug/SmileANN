@@ -56,8 +56,8 @@ class ANN :
         
         :param training_set: List containing inputs for the training
         :param answers: list containing the answers for the training set
-        :param error_level: Threshold to the error tolerance (default 20%)
-        :param learning_rate: Learning rate for the training (default 0.6)
+        :param error_level: Threshold to the error tolerance (default 20)
+        :param learning_rate: Learning rate for the training (default 0.4)
         """
         error_rate = 100
         sum_error,sum_test = 0., 0.
@@ -69,16 +69,15 @@ class ANN :
                 # index of the neuron supposed to be activated
                 right_neuron = answers[key] - 1
                 # get the most activated neuron
-                better_neuron = self.__perform__( training_set[key] )
+                activated_neuron = self.__perform__( training_set[key] )
                 # compute the error
-                error = 1 - self.__ann__[right_neuron].g( training_set[key] )
+                error = 1. - self.__ann__[right_neuron].g( training_set[key] )
                 # if the right neuron is not activated
-                if error > 0.08 : 
-                    print( "error", error )
+                if right_neuron != activated_neuron : 
                     # adjust ann sensitivity according to the error
                     self.__ann__[right_neuron].learn( training_set[key], error, learning_rate )
                     sum_error = sum_error + 1
-                print( str(key + '  \t' + str(answers[key]) + '\t' + str(better_neuron + 1)) )
+                print( str(key + '  \t' + str(answers[key]) + '\t' + str(activated_neuron)) )
             error_rate = int((sum_error / sum_test)*100)
             print( error_rate )
         
@@ -176,7 +175,7 @@ if __name__ == "__main__" :
         training_keys = [key for key in training_images]
         
         # define the number of subsets for trainings
-        nb_subsets = 10
+        nb_subsets = 3
         # define the size of the subset for training
         size_subset = int(len( training_images ) / nb_subsets)
         

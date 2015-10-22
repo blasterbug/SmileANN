@@ -12,8 +12,9 @@ __date__ = '20 October 2015'
 __version__ = '0.1b'
 
 
-from math import exp, tanh
 from random import uniform
+from math import exp
+#from math import tanh
 
 def sigmoid( t ) :
     """
@@ -38,9 +39,9 @@ class Neuron :
         :param size: Size of the inputs i.e. the number of synapses, weights
         are randomly choosen
         """
-        # give randomly weight to each synapses
-        #self.__synapses__ = [uniform( -10., 10. ) for i in range( size )]
-        self.__synapses__ = [ 0 for i in range( size )]
+        # randomly give weight to each synapses
+        self.__synapses__ = [uniform( 0., 1. ) for i in range( size )]
+        self.__bias__ = 1
         
 
     def g( self, inputs ) :
@@ -53,6 +54,7 @@ class Neuron :
         # first compute the sum of the input, regarding weight of synapses
         for i in range( len( self.__synapses__ ) ) :
             sum_input = inputs[i] * self.__synapses__[i]
+        sum_input += self.__bias__
         return sigmoid( sum_input )
         #return tanh( sum_input)
     
@@ -69,4 +71,5 @@ class Neuron :
             # set the sensitivity according to the input, the error 
             # and the learning rate
             self.__synapses__[i] += learning_rate * error * inputs[i]
-        
+        # update bias as well
+        self.__bias__ += learning_rate * error
