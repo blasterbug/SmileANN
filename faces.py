@@ -48,19 +48,18 @@ class ANN :
         res = [i for i in range( 4 )]
         for i in range( 4 ):
             res[i] = self.__ann__[i].g( image )
-        print(max( enumerate(res), key=( lambda x : x[1] ) )[0])
         return max( enumerate(res), key=( lambda x : x[1] ) )[0]
         
-    def train( self, training_set, answers, error_level=20, learning_rate=0.6 ) :
+    def train( self, training_set, answers, error_level=20, learning_rate=.005 ) :
         """
         Train an Artificial Neural Network
         
         :param training_set: List containing inputs for the training
         :param answers: list containing the answers for the training set
-        :param error_level: Threshold to the error tolerance (default 20)
-        :param learning_rate: Learning rate for the training (default 0.4)
+        :param error_level: The error tolerance in percent (default 20)
+        :param learning_rate: Learning rate for the training (default 0.005)
         """
-        error_rate = 100
+        error_rate, prev_error = 100, 0
         sum_error,sum_test = 0., 0.
         # while the error is "too huge"
         while error_rate > error_level :
@@ -78,9 +77,11 @@ class ANN :
                     # adjust ann sensitivity according to the error
                     self.__ann__[right_neuron].learn( training_set[key], error, learning_rate )
                     sum_error = sum_error + 1
-                print( str(key + '  \t' + str(answers[key]) + '\t' + str(activated_neuron)) )
+                #print( str(key + '  \t' + str(answers[key]) + '\t' + str(activated_neuron+1)) )
             error_rate = int((sum_error / sum_test)*100)
-            print( error_rate )
+            if prev_error != error_rate :
+                prev_error = error_rate
+                print( error_rate )
         
     def test( self, test_set ) :
         """
@@ -125,8 +126,9 @@ def read_images( test_file_name ) :
                     pixels = [int( x ) for x in line.split()]
                     # matrix in a vector
                     for colum in range( len( pixels ) ):
-                        # put the raw of the image in the array
-                        img[row * len( pixels ) + colum] = pixels[colum]
+                        # put the raw of the image in the array, 
+                        # and get reasonable inputs values
+                        img[row * len( pixels ) + colum] = pixels[colum]/32
                     # then the next lines are the image grey pixels value
                     line = faces_f.readline()
                 line = faces_f.readline()
@@ -175,15 +177,10 @@ if __name__ == "__main__" :
         
         training_keys = [key for key in training_images]
         
-        # define the number of subsets for trainings
-        nb_subsets = 3
-        # define the size of the subset for training
-        size_subset = int(len( training_images ) / nb_subsets)
-        
         # put training subsets in an array
-        training_subset = [{} for i in range( nb_subsets )]
-        for i in range(nb_subsets) :
-            training_subset[i] = {key : training_images[key] for key in training_keys[i:i+size_subset]}
+        training_subset = [{}, {}]
+        training_subset[0] = {key : training_images[key] for key in training_keys[:200]}
+        training_subset[1] = {key : training_images[key] for key in training_keys[200:300]}
         
         # create the ANN
         ann = ANN()
