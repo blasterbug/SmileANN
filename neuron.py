@@ -28,8 +28,8 @@ def sigmoid( t ) :
 
 class Neuron :
     """
-        Define neurons for a Artificial Neural Network using  the 
-        McCulloch–Pitts (MCP) neuron model.
+        Define neurons or perceptron using  the McCulloch–Pitts (MCP) neuron 
+        model.
     """
     # weight of each input
     def __init__( self, size ) :
@@ -73,3 +73,4 @@ class Neuron :
             self.__synapses__[i] += learning_rate * error * inputs[i]
         # update bias as well
         self.__bias__ += learning_rate * error
+    
