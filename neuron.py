@@ -35,10 +35,12 @@ class Neuron :
         """
         Create a neuron
         
-        :param size: Size of the inputs i.e. the number of synapses
+        :param size: Size of the inputs i.e. the number of synapses, weights
+        are randomly choosen
         """
         # give randomly weight to each synapses
-        self.__synapses__ = [uniform( -1., 1. ) for i in range( size )]
+        #self.__synapses__ = [uniform( -10., 10. ) for i in range( size )]
+        self.__synapses__ = [ 0 for i in range( size )]
         
 
     def g( self, inputs ) :

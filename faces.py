@@ -25,6 +25,7 @@ import sys
 import neuron
 from neuron import Neuron
 
+
 """
 define a help message
 """
@@ -47,8 +48,8 @@ class ANN :
         res = [i for i in range( 4 )]
         for i in range( 4 ):
             res[i] = self.__ann__[i].g( image )
-        return enumerate(res)
-
+        return max( enumerate(res), key=( lambda x : x[1] ) )[0]
+        
     def train( self, training_set, answers, error_level=20, learning_rate=0.6 ) :
         """
         Train an Artificial Neural Network
@@ -64,20 +65,20 @@ class ANN :
         while error_rate > error_level :
             # for each inputs
             for key in training_set :
-                sum_test += 1
+                sum_test = sum_test + 1
                 # index of the neuron supposed to be activated
                 right_neuron = answers[key] - 1
-                res = self.__perform__( training_set[key] )
-                # get the highest outputs (neurons number in ann and value)
-                better_neuron = max( res, key=( lambda x : x[1] ) )
+                # get the most activated neuron
+                better_neuron = self.__perform__( training_set[key] )
+                # compute the error
+                error = 1 - self.__ann__[right_neuron].g( training_set[key] )
                 # if the right neuron is not activated
-                if right_neuron != better_neuron[0] : 
-                    # compute the error to the right answer
-                    error = 1 - better_neuron[1]
+                if error > 0.08 : 
+                    print( "error", error )
                     # adjust ann sensitivity according to the error
-                    self.__ann__[ right_neuron ].learn( training_set[key], error, learning_rate )
-                    sum_error += 1
-                print( key, "  \t", answers[key], "\t" , better_neuron[0] + 1 )
+                    self.__ann__[right_neuron].learn( training_set[key], error, learning_rate )
+                    sum_error = sum_error + 1
+                print( str(key + '  \t' + str(answers[key]) + '\t' + str(better_neuron + 1)) )
             error_rate = int((sum_error / sum_test)*100)
             print( error_rate )
         
@@ -88,7 +89,7 @@ class ANN :
         :param test_set: the test set to be used on the ANN
         """
         for img in test_set :
-            print( img, perform( self.__ann__, test_set[img] ) )
+            print( str( img + '  \t' + str(self.__perform__( test_set[img] )+1) ) )
 
 def read_images( test_file_name ) :
     """
@@ -174,12 +175,14 @@ if __name__ == "__main__" :
         
         training_keys = [key for key in training_images]
         
+        # define the number of subsets for trainings
+        nb_subsets = 10
         # define the size of the subset for training
-        size_subset = int(len( training_images ) / 10)
+        size_subset = int(len( training_images ) / nb_subsets)
         
         # put training subsets in an array
-        training_subset = [{} for i in range( 10 )]
-        for i in range(10) :
+        training_subset = [{} for i in range( nb_subsets )]
+        for i in range(nb_subsets) :
             training_subset[i] = {key : training_images[key] for key in training_keys[i:i+size_subset]}
         
         # create the ANN
@@ -188,7 +191,7 @@ if __name__ == "__main__" :
         # train the network for a subset
         ann.train( training_subset[0], facit )
         
-        ann.test( training_set[1] )
+        ann.test( training_subset[1] )
         
         # get the images for the test
         #test = read_images( sys.argv[3] )
