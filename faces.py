@@ -48,6 +48,7 @@ class ANN :
         res = [i for i in range( 4 )]
         for i in range( 4 ):
             res[i] = self.__ann__[i].g( image )
+        print(max( enumerate(res), key=( lambda x : x[1] ) )[0])
         return max( enumerate(res), key=( lambda x : x[1] ) )[0]
         
     def train( self, training_set, answers, error_level=20, learning_rate=0.6 ) :
