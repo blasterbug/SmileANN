@@ -24,7 +24,6 @@ __version__ = '0.1'
 import neuron
 from neuron import Neuron
 import sys
-import operator
 
 
 """
@@ -51,38 +50,32 @@ class ANN :
             res[i] = self.__ann__[i].g( image )
         return max( enumerate(res), key=( lambda x : x[1] ) )[0]
         
-    def train( self, training_set, answers, error_level=20, learning_rate=.005 ) :
+    def train( self, training_set, answers, learning_rate=.005 ) :
         """
         Train an Artificial Neural Network
         
-        :param training_set: List containing inputs for the training
-        :param answers: list containing the desired outputs for the training set
-        :param error_level: The error tolerance in percent (default 20)
+        :param training_set: the inputs for the training
+        :param answers: the desired outputs for the training set
         :param learning_rate: Learning rate for the training (default 0.005)
         """
-        error_rate, prev_error = 100, 0
-        sum_error,sum_test = 0., 0.
-        # while the error is "too huge"
-        while error_rate > error_level :
-            # for each inputs
-            for key in training_set :
-                sum_test = sum_test + 1
-                # index of the neuron supposed to be activated
-                right_neuron = answers[key] - 1
-                # get the most activated neuron
-                activated_neuron = self.__perform__( training_set[key] )
+        # for each inputs
+        for key in training_set :
+            # get the neuron supposed to be activated
+            right_neuron = answers[key] - 1
+            # get the most activated neuron
+            activated_neuron = self.__perform__( training_set[key] )
+            # if the right neuron is not activated
+            if right_neuron != activated_neuron : 
                 # compute the error
                 error = 1. - self.__ann__[right_neuron].g( training_set[key] )
-                # if the right neuron is not activated
-                if right_neuron != activated_neuron : 
-                    # adjust ann sensitivity according to the error
-                    self.__ann__[right_neuron].learn( training_set[key], error, learning_rate )
-                    sum_error = sum_error + 1
-                #print( str(key + '  \t' + str(answers[key]) + '\t' + str(activated_neuron+1)) )
-            error_rate = int((sum_error / sum_test)*100)
-            if prev_error != error_rate :
-                prev_error = error_rate
-                print( error_rate )
+                # adjust ann sensitivity according to the error
+                self.__ann__[right_neuron].learn( training_set[key], error, learning_rate )
+                
+            for i in range(4) :
+                if i != right_neuron :
+                    error = 0. - self.__ann__[right_neuron].g( training_set[key] )
+                    self.__ann__[i].learn(training_set[key], error, learning_rate)
+
         
     def recognize( self, faces ) :
         """
@@ -113,7 +106,7 @@ def read_images( test_file_name ) :
     # create a dictionary
     images = {}
     # initiate a name for the first image
-    img_name = "image unknown"
+    #img_name = "imageX"
     # while where is lines in the file
     while line:
         # if the line starts by a capital I
@@ -132,8 +125,9 @@ def read_images( test_file_name ) :
                 image_row = [int( x ) for x in line.split()]
                 # for each pixels on the row
                 for colum in range( len( image_row ) ):
-                    # convert the value to integer and put it in the matrix
-                    img[row * len( image_row ) + colum] = int(image_row[colum])
+                    # convert the value to float and divide it to make suitable
+                    # and store it in the matrix
+                    img[row * len( image_row ) + colum] = float(image_row[colum])/32.
                 # the next line is the next row of the image
                 line = faces_f.readline()
             # then link the read image name with the image itself
@@ -181,11 +175,29 @@ if __name__ == "__main__" :
         training_subset = [{}, {}]
         training_subset[0] = {key : training_images[key] for key in training_keys[:200]}
         training_subset[1] = {key : training_images[key] for key in training_keys[200:300]}
+        
         # create the ANN
         ann = ANN()
-        # train the network for a subset
-        ann.train( training_subset[0], facit, error_level=72 )
         
+        error = 100.
+        prev_error = 0.
+        # while the error rate is high
+        while error > 70. :
+            # train the network for a subset
+            ann.train( training_images, facit, learning_rate=0.005 )
+            sum_error, sum_total = 0., 0.
+            # test the performance
+            res_test = ann.recognize( training_subset[0] )
+            for face in res_test :
+                sum_total += 1.
+                if int(facit[face]) != int(res_test[face]) :
+                    sum_error += 1.
+            # update error rate
+            error = (sum_error / sum_total) * 100
+            if prev_error != error :
+                prev_error = error
+                print( error )
+            
         # cognize faces
         #final = ann.recognize( test )
         # display the res
@@ -193,16 +205,15 @@ if __name__ == "__main__" :
         #   print( str( face + '  \t' + str(final[face]) ) )
         
         # get the images for the test
-        #test = read_images( sys.argv[3] )
         test = read_images( sys.argv[3] )
         res_test = ann.recognize( test )
-        sum_error, sum_total = 0, 0
+        sum_error, sum_total = 0., 0.
         for face in res_test :
-            sum_total += 1
+            sum_total += 1.
             if int(facit[face]) != int(res_test[face]) :
-                sum_error += 1
+                sum_error += 1.
             print( str( face + '  \t' + str(facit[face]) + '\t' + str(res_test[face]) ) )
-        print( sum_error , sum_total )
+        print( (sum_error / sum_total) * 100 )
         
     else :
         print( help )
