@@ -65,16 +65,15 @@ class ANN :
             # get the most activated neuron
             activated_neuron = self.__perform__( training_set[key] )
             # if the right neuron is not activated
-            if right_neuron != activated_neuron : 
-                # compute the error
-                error = 1. - self.__ann__[right_neuron].g( training_set[key] )
-                # adjust ann sensitivity according to the error
-                self.__ann__[right_neuron].learn( training_set[key], error, learning_rate )
-                
-            for i in range(4) :
-                if i != right_neuron :
-                    error = 0. - self.__ann__[right_neuron].g( training_set[key] )
-                    self.__ann__[i].learn(training_set[key], error, learning_rate)
+            if right_neuron != activated_neuron :
+                # for each neuron
+                for i in range( 4 ) :
+                    # compute the wanted ouput
+                    searched_output = 0. + int(i == right_neuron)
+                    # compute the error
+                    error = searched_output - self.__ann__[i].g( training_set[key] )
+                    # adjust ann sensitivity according to the error
+                    self.__ann__[i].learn( training_set[key], error, learning_rate )
 
         
     def recognize( self, faces ) :
@@ -175,19 +174,18 @@ if __name__ == "__main__" :
         training_subset = [{}, {}]
         training_subset[0] = {key : training_images[key] for key in training_keys[:200]}
         training_subset[1] = {key : training_images[key] for key in training_keys[200:300]}
-        
         # create the ANN
         ann = ANN()
         
         error = 100.
         prev_error = 0.
         # while the error rate is high
-        while error > 70. :
+        while error > 60. :
             # train the network for a subset
-            ann.train( training_images, facit, learning_rate=0.005 )
+            ann.train( training_subset[0], facit, learning_rate=.005 )
             sum_error, sum_total = 0., 0.
             # test the performance
-            res_test = ann.recognize( training_subset[0] )
+            res_test = ann.recognize( training_subset[1] )
             for face in res_test :
                 sum_total += 1.
                 if int(facit[face]) != int(res_test[face]) :

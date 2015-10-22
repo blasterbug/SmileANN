@@ -40,7 +40,7 @@ class Neuron :
         are randomly choosen
         """
         # randomly give weight to each synapses
-        self.__synapses__ = [uniform( 0., 1. ) for i in range( size )]
+        self.__synapses__ = [uniform( 0. , 1. ) for i in range( size )]
         self.__bias__ = 1.
         
 
