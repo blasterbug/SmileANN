@@ -4,12 +4,12 @@
 Define an Artificial Neuron based on the McCulloch–Pitts (MCP) neuron model.
 
 Generate pydoc by running : 
-    $ pydoc -w faces
+    $ pydoc -w neurom
 """
 
 __author__ = 'Benjamin Sientzoff'
-__date__ = '20 October 2015'
-__version__ = '0.1b'
+__date__ = '22 October 2015'
+__version__ = '0.2b'
 
 
 from random import uniform
@@ -41,12 +41,12 @@ class Neuron :
         """
         # randomly give weight to each synapses
         self.__synapses__ = [uniform( 0., 1. ) for i in range( size )]
-        self.__bias__ = 1
+        self.__bias__ = 1.
         
 
     def g( self, inputs ) :
         """
-        activation function
+        Activation function
         
         :param inputs: the inputs to process
         :return: activation state of the neuron
@@ -60,10 +60,10 @@ class Neuron :
     
     def learn( self, inputs, error, learning_rate ) :
         """
-        define a function to set the synapses weight
+        Update the synapses weight to learn recognizing patterns
         
-        :param value: proportional offset to use to set inputs sensitivity
-        :param error: the error regarding inputs and desired ouput
+        :param inputs: the inputs to recognize
+        :param error: the error regarding the inputs and desired ouputs
         :param learning_rate: learning rate
         """
         # for each synapses
