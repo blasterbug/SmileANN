@@ -11,13 +11,20 @@
     \paragraph{}{
         A perceptron, or a neuron, is basically a function encapsulate in a 
      cell. The cell has inputs, the synapses. Each synapse has a weight. To
-     
+     activate the neuron, the neuron use his activation function. The activation
+     function is the sum of all inputs, regarding the weights of each inputs.
+     Then to adjust the activation level, the add a bias, which is a special
+     input always at $1$ but with a weight. Then we use the \texttt{sigmoid}
+     \footnote{ the \texttt{sigmoid} function is define by $sigmoid(t) = 
+     \frac{1}{1 + e^{-t}}$} function to activate the neuron with the previous 
+     sum as the input. The ouput level is borned between $0$ and $1$. And the
+     neuron is activated when his ouput is \textit{close} to $1$.
     }
     
     \begin{figure}[!h]
         \label{fig:neuron}
         \begin{center}
-            \input{figures/perceptron.tex}
+            \input{figures/perceptron}
         \end{center}
         \caption{an artificial neurone}
     \end{figure}
@@ -37,7 +44,7 @@
     \begin{figure}[!h]
         \label{fig:ann}
         \begin{center}
-            \input{figures/ann.tex}
+            \input{figures/ann}
         \end{center}
         \caption{the artificial neural network used to recongize faces}
     \end{figure}
