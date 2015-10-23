@@ -25,12 +25,6 @@ import neuron
 from neuron import Neuron
 import sys
 
-
-"""
-define a help message
-"""
-help = "\nUsage :\n $ python faces.py train facit test\n train: the training set\n facit: the training solution\n test : file for test\n"
-
 class ANN :
     """
     An Artificial Neuronal Network to recognize faces
@@ -160,6 +154,8 @@ def read_facit( facit_file_name ):
     return facit
 
 if __name__ == "__main__" :
+    # define a help message
+    help = "\nUsage :\n $ python faces.py train facit test\n train: the training set\n facit: the training solution\n test : file for test\n"
     # require 3 arguments
     if 4 == len( sys.argv ) :
         # get the images for the training set
