@@ -1,0 +1,91 @@
+\documentclass[12pt,a4paper,oneside,notitlepage]{article}
+\usepackage[utf8x]{inputenc}
+\usepackage{tikz}
+\usetikzlibrary {positioning,fit}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{ucs}
+\usepackage{makeidx}
+\usepackage{url}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{cite} 
+\usepackage{ifpdf}
+\usepackage{listings}
+
+\usepackage[english]{babel}
+
+\author{Benjamin Sientzoff}
+\title{\textbf{5DV121} \\ Assignment 2 \\ Neural Network}
+
+% info PDF
+\ifpdf
+\hypersetup{
+    colorlinks=false,
+    unicode=true,
+    pdfauthor={Benjamin Sientzoff (ens15bsf)},
+    pdftitle={5DV121 - Assignment 2 : Neural Network}
+}
+\fi
+
+\def\inst{Computer Science}
+\def\typeofdoc{Assignment report}
+\def\course{5DV121}
+\def\pretitle{~}
+\def\title{Neural Network}
+\def\benj{Benjamin Sientzoff}
+\def\userbenj{ens15bsf}
+\def\emailbenj{\userbenj{}@cs.umu.se}
+\def\path{edu/5dv121/lab2/}
+\def\graders{Thomas Johansson, Adam Dahlgren}
+
+
+\def\fullpath{\raisebox{1pt}{$\scriptstyle \sim$}\userbenj/\path}
+
+\makeindex
+
+\begin{document}
+
+    \begin{titlepage}
+        \thispagestyle{empty}
+        \begin{large}
+            \begin{tabular}{@{}p{\textwidth}@{}}
+                \textbf{UMEÅ UNIVERSITY \hfill \today} \\
+                \textbf{Institution of \inst} \\
+                \textbf{\typeofdoc} \\
+            \end{tabular}
+        \end{large}
+        \vspace{10mm}
+        \begin{center}
+            \LARGE{\pretitle} \\
+            \huge{\textbf{\course}}\\
+            \vspace{10mm}
+            \LARGE{\title} \\
+            \vspace{15mm}
+            \begin{large}
+                \begin{tabular}{lp{6cm}}
+                    \textbf{Name} & \benj \\
+                    \textbf{E-mail} & \texttt{\emailbenj} \\
+                    \textbf{Path} & \texttt{\fullpath} \\
+                \end{tabular}
+            \end{large}
+            \vfill
+            \large{\textbf{Tutors}}\\
+            \makebox[5pt]{\large{\graders}}
+        \end{center}
+    \end{titlepage}
+
+
+\section*{Introduction}
+
+\section*{Conclusion}
+
+\begin{lstlisting}[language=Python,basicstyle=\small\ttfamily,breaklines=true,showtabs=false,showspaces=false,breakatwhitespace=true]
+	$0
+\end{lstlisting}
+\section{}
+%\bibliography{biblio}{}
+%\bibliographystyle{plain}
+
+\end{document}
