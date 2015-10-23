@@ -8,13 +8,11 @@ Generate pydoc by running :
 """
 
 __author__ = 'Benjamin Sientzoff'
-__date__ = '22 October 2015'
-__version__ = '0.2b'
+__date__ = '23 October 2015'
+__version__ = '0.3b'
 
-
-from random import uniform
 from math import exp
-#from math import tanh
+from random import uniform
 
 def sigmoid( t ) :
     """
@@ -57,7 +55,6 @@ class Neuron :
             sum_input += inputs[i] * self.__synapses__[i]
         sum_input += self.__bias__
         return sigmoid( sum_input )
-        #return tanh( sum_input)
     
     def learn( self, inputs, error, learning_rate ) :
         """

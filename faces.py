@@ -24,6 +24,7 @@ __version__ = '0.1'
 import neuron
 from neuron import Neuron
 import sys
+from random import shuffle
 
 class ANN :
     """
@@ -173,11 +174,11 @@ if __name__ == "__main__" :
         # create the ANN
         ann = ANN()
         
-        error = 100.
+        error_rate = 100.
         prev_error = 0.
         # while the error rate is high
         print( "# training phase" )
-        while error > 20. :
+        while error_rate > 20. :
             # train the network for a subset
             ann.train( training_subset[0], facit, learning_rate=.005 )
             sum_error, sum_total = 0., 0.
@@ -191,28 +192,28 @@ if __name__ == "__main__" :
             error = (sum_error / sum_total) * 100
             if prev_error != error :
                 prev_error = error
-                print( str("# error rate : " + str(error) ) )
+            # get the images for the test
+            test = read_images( sys.argv[3] )
+            res_test = ann.recognize( test )
+            sum_error, sum_total = 0., 0.
+            for face in res_test :
+                sum_total += 1.
+                if int(facit[face]) != int(res_test[face]) :
+                    sum_error += 1.
+            error_rate = (sum_error / sum_total) * 100.
+            print( str( "# error rate :" + str(error_rate) ) )
+            # shuffle the training sets
+            shuffle( training_keys )
+            training_subset[0] = {key : training_images[key] for key in training_keys[:200]}
+            training_subset[1] = {key : training_images[key] for key in training_keys[200:300]}
         
-        # get the images for the test
-        print( "# test phase" )
-        test = read_images( sys.argv[3] )
-        res_test = ann.recognize( test )
-        sum_error, sum_total = 0., 0.
-        for face in res_test :
-            sum_total += 1.
-            if int(facit[face]) != int(res_test[face]) :
-                sum_error += 1.
-            print( str( "# " + face + '  \t' + str(facit[face]) 
-                    + '\t' + str(res_test[face]) 
-                    )
-                )
-        print( str( "# error rate :" + str( (sum_error / sum_total) * 100 ) ) )
-            
+         # get the images for the test
+        test_images = read_images( sys.argv[3] )
+        
         # cognize faces
-        #final = ann.recognize( test )
+        final = ann.recognize( test_images )
         # display the res
-        #for face in res :
-        #   print( str( face + '  \t' + str(final[face]) ) )
-        
+        for face in final :
+            print( str( face + '  \t' + str(final[face]) ) )
     else :
         print( help )
