@@ -56,14 +56,15 @@ class Neuron :
         sum_input += self.__bias__
         return sigmoid( sum_input )
     
-    def learn( self, inputs, error, learning_rate ) :
+    def learn( self, inputs, ouput, learning_rate ) :
         """
         Update the synapses weight to learn recognizing patterns
         
         :param inputs: the inputs to recognize
-        :param error: the error regarding the inputs and desired ouputs
+        :param ouput: the desired ouput regarding the inputs
         :param learning_rate: learning rate
         """
+        error = ouput - self.g( inputs )
         # for each synapses
         for i in range( len( self.__synapses__ ) ) :
             # set the sensitivity according to the input, the error 

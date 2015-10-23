@@ -65,10 +65,8 @@ class ANN :
                 for i in range( 4 ) :
                     # compute the wanted ouput
                     searched_output = 0. + int(i == right_neuron)
-                    # compute the error
-                    error = searched_output - self.__ann__[i].g( training_set[key] )
                     # adjust ann sensitivity according to the error
-                    self.__ann__[i].learn( training_set[key], error, learning_rate )
+                    self.__ann__[i].learn( training_set[key], searched_output, learning_rate )
 
         
     def recognize( self, faces ) :
@@ -213,6 +211,7 @@ if __name__ == "__main__" :
         # cognize faces
         final = ann.recognize( test_images )
         # display the res
+        print( "# recognize phase" )
         for face in final :
             print( str( face + '  \t' + str(final[face]) ) )
     else :
