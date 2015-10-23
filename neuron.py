@@ -52,8 +52,9 @@ class Neuron :
         :return: activation state of the neuron
         """
         # first compute the sum of the input, regarding weight of synapses
+        sum_input = 0
         for i in range( len( self.__synapses__ ) ) :
-            sum_input = inputs[i] * self.__synapses__[i]
+            sum_input += inputs[i] * self.__synapses__[i]
         sum_input += self.__bias__
         return sigmoid( sum_input )
         #return tanh( sum_input)

@@ -181,7 +181,7 @@ if __name__ == "__main__" :
         prev_error = 0.
         # while the error rate is high
         print( "# training phase" )
-        while error > 60. :
+        while error > 20. :
             # train the network for a subset
             ann.train( training_subset[0], facit, learning_rate=.005 )
             sum_error, sum_total = 0., 0.
