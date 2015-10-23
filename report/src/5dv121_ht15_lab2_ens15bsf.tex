@@ -8,12 +8,13 @@
 \usepackage{amsmath}
 \usepackage{ucs}
 \usepackage{makeidx}
+\usepackage{cite}
+\usepackage{algpseudocode}
+\usepackage{listings}
 \usepackage{url}
 \usepackage{xcolor}
 \usepackage{hyperref}
-\usepackage{cite} 
 \usepackage{ifpdf}
-\usepackage{listings}
 \usepackage[title,titletoc,toc]{appendix}
 
 \usepackage[english]{babel}
@@ -24,7 +25,7 @@
 % info PDF
 \ifpdf
 \hypersetup{
-    colorlinks=false,
+    colorlinks=true,
     unicode=true,
     pdfauthor={Benjamin Sientzoff (ens15bsf)},
     pdftitle={5DV121 - Assignment 2 : Neural Network}
@@ -99,6 +100,10 @@
     \end{titlepage}
 
 
+\tableofcontents
+
+\newpage
+
 \input{intro}
 
 \input{dev}
@@ -107,9 +112,12 @@
 
 \input{conclusion}
 
-\input{appendix}
 
-%\bibliography{biblio}{}
-%\bibliographystyle{plain}
+\bibliography{biblio}{}
+\bibliographystyle{abbrv}
+
+\newpage
+
+\input{appendix}
 
 \end{document}

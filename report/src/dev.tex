@@ -1,53 +1,128 @@
 \section{Faces recognition process}
 
-    \paragraph{}{
-        To recognise each faces, I use a perceptron trained to recognize a 
-     specific face. So I have four neurons: One to reconigze happy faces, one to
-     recognize sad faces and so on.
-    }
+\paragraph{}{
+    To recognize each faces, I use a perceptron trained to recognize a 
+ specific face. So I have four neurons: One to recognize happy faces, one to
+ recognize sad faces and so on.
+}
 
-    \subsection{Perceptrons}
+\subsection{Perceptron}
 
-    \paragraph{}{
-        A perceptron, or a neuron, is basically a function encapsulate in a 
-     cell. The cell has inputs, the synapses. Each synapse has a weight. To
-     activate the neuron, the neuron use his activation function. The activation
-     function is the sum of all inputs, regarding the weights of each inputs.
-     Then to adjust the activation level, the add a bias, which is a special
-     input always at $1$ but with a weight. Then we use the \texttt{sigmoid}
-     \footnote{ the \texttt{sigmoid} function is define by $sigmoid(t) = 
-     \frac{1}{1 + e^{-t}}$} function to activate the neuron with the previous 
-     sum as the input. The ouput level is borned between $0$ and $1$. And the
-     neuron is activated when his ouput is \textit{close} to $1$.
-    }
-    
-    \begin{figure}[!h]
-        \label{fig:neuron}
-        \begin{center}
-            \input{figures/perceptron}
-        \end{center}
-        \caption{an artificial neurone}
-    \end{figure}
-    
-    \paragraph{}{
-    
-    }
+\label{par:percep}
+\paragraph{}{
+    A perceptron, or a neuron, is basically a function encapsulate in a 
+ cell. The cell has inputs, the synapses. Each synapse has a weight. To
+ activate the neuron, the neuron uses his activation function. The activation
+ function is the sum of all inputs, regarding the weights of each synapse.
+ Then to adjust the activation level, a bias is added, it is a special
+ input always at $1$. The bias has also a weight. Then we use the 
+ \texttt{sigmoid} \footnote{ the \texttt{sigmoid} function is define by 
+ $sigmoid(t) = \frac{1}{1 + e^{-t}}$} function to activate the neuron with the 
+ previous sum as the input. The output level is mark out by $0$ and $1$. 
+ Finally,the neuron is activated when his output is \textit{close} to $1$. This
+ model was firstly proposed by McCulloch-Pitts\cite{art:mcp}.
+}
 
-    \paragraph{}{
-    }
+\begin{figure}[!h]
+    \begin{center}
+        \input{figures/perceptron}
+    \end{center}
+    \caption{\label{fig:neuron} An artificial neuron}
+\end{figure}
 
-    \subsection{The network}
+\paragraph{}{
+    So, a neuron can be seen as this mathematical expression :
+ \begin{equation}
+    g( sigmoid(\sum_{i=1}^{400}(s_i \times w_i) + bias ))
+ \end{equation}
+ The figure \ref{fig:neuron} shows how we can modeled an artificial neuron.
+ This model is implemented in a class, \texttt{neuron}. Such source code is 
+ available appendix \ref{app:neuron}. A neuron is created of a given amount of 
+ inputs and has as many synapses as inputs size. The most import functions are 
+ \texttt{g} and \texttt{learn}.
+}
+    \subparagraph{\texttt{learn}}{
+     This function allows us to train a neuron. To do so, the neuron updates the
+ weight of each synapse and of the bias regarding a given learning rate 
+ $\alpha$, inputs and desire output for the inputs. Which can translate to the
+ algorithm below at the figure \ref{fig:algo_learn}.
+}
 
-    \paragraph{}{
-    }
+\begin{figure}[!h]
+    \begin{algorithmic}
+    \Function{learn}{inputs, output}
+        \State $error \gets output - g(inputs)$
+        \For{ i from 0 to synapses\_number}
+            \State $ synapse_i \gets synapse_i + input_i \times error \times \alpha $
+        \EndFor
+        \State $bias \gets bias \times error \times \alpha $
+     \EndFunction
+    \end{algorithmic}
+    \caption{\label{fig:algo_learn} Learning algorithm for neurons.}
+\end{figure}
 
-    \begin{figure}[!h]
-        \label{fig:ann}
-        \begin{center}
-            \input{figures/ann}
-        \end{center}
-        \caption{the artificial neural network used to recongize faces}
-    \end{figure}
+    \subparagraph{\texttt{g}}{
+     The activation function, \texttt{g} define in which state is the neuron
+ for given inputs. His operating is explained above in part \ref{par:percep}.
+ The figure \ref{fig:algo_g} shows the algorithm used to implement the activation
+ function.
+}
 
-    \paragraph{}{
-    }
+\begin{figure}[!h]
+    \begin{algorithmic}
+    \Function{g}{inputs}
+        \State $sum \gets 0$
+        \For{ i from 0 to synapses\_number}
+            \State $ sum \gets sum + input_i \times synapse_i $
+        \EndFor
+        \State $ sum \gets sum + bias $
+        \State \Return \Call{sigmoid}{sum}
+     \EndFunction
+    \end{algorithmic}
+    \caption{\label{fig:algo_g} Activation algorithm for neurons.}
+\end{figure}
+
+
+\paragraph{}{
+    But using only one neuron is not interesting. As we want to recognize four
+ different face types, I use a neuron for each face. So I build a network of 
+ four neurons and I train each neurons to recognize only one face type.
+}
+
+\subsection{The network}
+
+\paragraph{Recognize faces}{
+    The network I realized to recognize faces can be seen figure \ref{fig:ann}.
+ Each perceptrons have as many inputs as there are pixels on images. To know
+ which faces is recognized, I get the neuron number with the highest activation
+ level. This number matches with the faces the network should recognize.
+}
+
+\begin{figure}[!h]
+    \begin{center}
+        \input{figures/ann}
+    \end{center}
+    \caption{\label{fig:ann} The artificial neural network used to recognize faces}
+\end{figure}
+
+\paragraph{}{
+    For instance, the first neuron has to be activated and with highest level 
+ measured within the network if the inputs represented a happy face. To do so,
+ I have to train the network before using it.
+}
+
+\paragraph{Training}{
+    To train the network, I give a image to the network and if the wrong neuron
+ is activated, I train each neuron to recognize the face. For the neuron which
+ should be activated, the desired output is $1$ and for the others one, the 
+ output should be $0$.
+}
+
+\paragraph{}{
+    The training process is performed till the network recognize less than 
+ eighty percent of the given images. As we have a input file with three hundred
+ images with the corresponding faces, I train the network with two hundred images
+ (approximately seventy five percent) and I measure the error rate with the 
+ left images. Then I shuffle the two sets to redo a round training if the level 
+ of recognized faces rate is too low.
+}
