@@ -180,6 +180,7 @@ if __name__ == "__main__" :
         error = 100.
         prev_error = 0.
         # while the error rate is high
+        print( "# training phase" )
         while error > 60. :
             # train the network for a subset
             ann.train( training_subset[0], facit, learning_rate=.005 )
@@ -194,15 +195,10 @@ if __name__ == "__main__" :
             error = (sum_error / sum_total) * 100
             if prev_error != error :
                 prev_error = error
-                print( error )
-            
-        # cognize faces
-        #final = ann.recognize( test )
-        # display the res
-        #for face in res :
-        #   print( str( face + '  \t' + str(final[face]) ) )
+                print( str("# error rate : " + str(error) ) )
         
         # get the images for the test
+        print( "# test phase" )
         test = read_images( sys.argv[3] )
         res_test = ann.recognize( test )
         sum_error, sum_total = 0., 0.
@@ -210,8 +206,17 @@ if __name__ == "__main__" :
             sum_total += 1.
             if int(facit[face]) != int(res_test[face]) :
                 sum_error += 1.
-            print( str( face + '  \t' + str(facit[face]) + '\t' + str(res_test[face]) ) )
-        print( (sum_error / sum_total) * 100 )
+            print( str( "# " + face + '  \t' + str(facit[face]) 
+                    + '\t' + str(res_test[face]) 
+                    )
+                )
+        print( str( "# error rate :" + str( (sum_error / sum_total) * 100 ) ) )
+            
+        # cognize faces
+        #final = ann.recognize( test )
+        # display the res
+        #for face in res :
+        #   print( str( face + '  \t' + str(final[face]) ) )
         
     else :
         print( help )
