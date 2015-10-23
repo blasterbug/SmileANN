@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Define an Artificial Neuron based on the McCulloch–Pitts (MCP) neuron model.
+Define an Artificial Neuron based on the McCulloch-Pitts (MCP) neuron model.
 
 Generate pydoc by running : 
     $ pydoc -w neurom
@@ -28,8 +28,8 @@ def sigmoid( t ) :
 
 class Neuron :
     """
-        Define neurons or perceptron using  the McCulloch–Pitts (MCP) neuron 
-        model.
+    Define an Artificial Neuron also called perceptron based on the 
+    McCulloch-Pitts (MCP) neuron model.
     """
     # weight of each input
     def __init__( self, size ) :
