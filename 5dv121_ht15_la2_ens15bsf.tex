@@ -13,6 +13,7 @@
 \usepackage{cite} 
 \usepackage{ifpdf}
 \usepackage{listings}
+\usepackage[title,titletoc,toc]{appendix}
 
 \usepackage[english]{babel}
 
@@ -38,6 +39,7 @@
 \def\userbenj{ens15bsf}
 \def\emailbenj{\userbenj{}@cs.umu.se}
 \def\path{edu/5dv121/lab2/}
+\def\run{python faces.py training-file.txt training-facit.txt test-file.txt}
 \def\graders{Thomas Johansson, Adam Dahlgren}
 
 
@@ -46,6 +48,15 @@
 \makeindex
 
 \begin{document}
+
+\lstset{
+    language=Python,
+    basicstyle=\small\ttfamily,
+    breaklines=true,
+    showtabs=false,
+    showspaces=false,
+    breakatwhitespace=true
+}
 
     \begin{titlepage}
         \thispagestyle{empty}
@@ -56,13 +67,13 @@
                 \textbf{\typeofdoc} \\
             \end{tabular}
         \end{large}
-        \vspace{10mm}
+        \vfill
         \begin{center}
             \LARGE{\pretitle} \\
             \huge{\textbf{\course}}\\
             \vspace{10mm}
             \LARGE{\title} \\
-            \vspace{15mm}
+            \vspace{20mm}
             \begin{large}
                 \begin{tabular}{lp{6cm}}
                     \textbf{Name} & \benj \\
@@ -77,14 +88,16 @@
     \end{titlepage}
 
 
-\section*{Introduction}
+\input{intro}
 
-\section*{Conclusion}
+\input{dev}
 
-\begin{lstlisting}[language=Python,basicstyle=\small\ttfamily,breaklines=true,showtabs=false,showspaces=false,breakatwhitespace=true]
-	$0
-\end{lstlisting}
-\section{}
+\input{difficulties}
+
+\input{conclusion}
+
+\input{appendix}
+
 %\bibliography{biblio}{}
 %\bibliographystyle{plain}
 
