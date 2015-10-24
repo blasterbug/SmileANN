@@ -10,6 +10,7 @@ Generate pydoc by running :
 __author__ = 'Benjamin Sientzoff'
 __date__ = '23 October 2015'
 __version__ = '0.3b'
+__license__ = "GNU GENERAL PUBLIC LICENSE V.2, June 1991"
 
 from math import exp
 from random import uniform
@@ -35,7 +36,7 @@ class Neuron :
         Create a neuron
         
         :param size: Size of the inputs i.e. the number of synapses, weights
-        are randomly choosen
+        are randomly chosen
         """
         # randomly give weight to each synapses
         self.__synapses__ = [uniform( 0. , 1. ) for i in range( size )]
@@ -56,15 +57,15 @@ class Neuron :
         sum_input += self.__bias__
         return sigmoid( sum_input )
     
-    def learn( self, inputs, ouput, learning_rate ) :
+    def learn( self, inputs, output, learning_rate ) :
         """
         Update the synapses weight to learn recognizing patterns
         
         :param inputs: the inputs to recognize
-        :param ouput: the desired ouput regarding the inputs
+        :param output: the desired output regarding the inputs
         :param learning_rate: learning rate
         """
-        error = ouput - self.g( inputs )
+        error = output - self.g( inputs )
         # for each synapses
         for i in range( len( self.__synapses__ ) ) :
             # set the sensitivity according to the input, the error 

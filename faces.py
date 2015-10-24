@@ -18,6 +18,7 @@ Generate pydoc by running :
 __author__ = 'Benjamin Sientzoff'
 __date__ = '22 October 2015'
 __version__ = '0.1'
+__license__ = "GNU GENERAL PUBLIC LICENSE V.2, June 1991"
 
 # useful for stderr output
 #from __future__ import print_function
