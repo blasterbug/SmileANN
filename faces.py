@@ -75,7 +75,7 @@ class ANN :
         Recognize faces
         
         :param faces: the test set to be used on the ANN
-        :return: dictionnary containing for each faces name the recognized face
+        :return: dictionary containing for each faces name the recognized face
         """
         res = {}
         # for each images
