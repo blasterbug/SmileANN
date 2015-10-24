@@ -4,15 +4,14 @@
 """
 A row of Artificial Neural Network (ANN)
 to recognize smiley faces as follow :
- * 1: Happy :)
- * 2: Sad :(
- * 3: Mischievous >)
- * 4: Mad >(
-The files containing images *must* use the given format, the name
-of the image follow by the pixel grey-scale value for each pixels.
+
+ - 1: Happy :)
+ - 2: Sad :(
+ - 3: Mischievous >)
+ - 4: Mad >(
 
 Generate pydoc by running : 
-    $ pydoc -w faces
+    `$ pydoc -w faces`
 """
 
 __author__ = 'Benjamin Sientzoff'

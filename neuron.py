@@ -4,7 +4,7 @@
 Define an Artificial Neuron based on the McCulloch-Pitts (MCP) neuron model.
 
 Generate pydoc by running : 
-    $ pydoc -w neurom
+    `$ pydoc -w neuron`
 """
 
 __author__ = 'Benjamin Sientzoff'
