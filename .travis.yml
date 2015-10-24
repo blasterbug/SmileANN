@@ -10,5 +10,5 @@ python:
   - "3.3"
   - "3.4"
   - "3.5"
-script: python faces.py training-file.txt training-facit.txt test-file.txt
-
+# script: python faces.py training-file.txt training-facit.txt test-file.txt
+script: python faces.py training-file.txt training-facit.txt training-file.txt
