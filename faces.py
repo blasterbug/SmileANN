@@ -170,6 +170,7 @@ if __name__ == "__main__" :
         
         # compute size of training subsets
         tst_end = len( training_keys )
+        # run trqing for approx. 2/3 of the images and test on the 1/3 remaining
         tst_start = int( tst_end * .70 )
         
         # put training subsets in an array
