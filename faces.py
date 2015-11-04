@@ -168,10 +168,14 @@ if __name__ == "__main__" :
         
         training_keys = [key for key in training_images]
         
+        # compute size of training subsets
+        tst_end = len( training_keys )
+        tst_start = int( tst_end * .70 )
+        
         # put training subsets in an array
         training_subset = [{}, {}]
-        training_subset[0] = {key : training_images[key] for key in training_keys[:200]}
-        training_subset[1] = {key : training_images[key] for key in training_keys[200:300]}
+        training_subset[0] = { key : training_images[key] for key in training_keys[:tst_start] }
+        training_subset[1] = { key : training_images[key] for key in training_keys[tst_start:tst_end] }
         # create the ANN
         ann = ANN()
         
