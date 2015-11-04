@@ -16,7 +16,7 @@ Generate pydoc by running :
 
 __author__ = 'Benjamin Sientzoff'
 __date__ = '22 October 2015'
-__version__ = '0.1'
+__version__ = '0.2'
 __license__ = "GNU GENERAL PUBLIC LICENSE V.2, June 1991"
 
 # useful for stderr output
@@ -30,10 +30,10 @@ class ANN :
     """
     An Artificial Neuronal Network to recognize faces
     """
-    def __init__( self ):
+    def __init__( self ) :
         self.__ann__ = [Neuron(400) for i in range( 4 )]
 
-    def __perform__( self, image ):
+    def __perform__( self, image ) :
         """
         Use the ANN to recognize an image
         
@@ -41,7 +41,7 @@ class ANN :
         :return: activated neuron
         """
         res = [i for i in range( 4 )]
-        for i in range( 4 ):
+        for i in range( 4 ) :
             res[i] = self.__ann__[i].g( image )
         return max( enumerate(res), key=( lambda x : x[1] ) )[0]
         
@@ -101,8 +101,11 @@ def read_images( test_file_name ) :
     #img_name = "imageX"
     # while where is lines in the file
     while line:
+        # skip comments
+        if line.startswith( "#" ) :
+            line = faces_f.readline()
         # if the line starts by a capital I
-        if line.startswith( 'I' ):
+        if line.startswith( 'I' ) :
             # create a new entry for the dictionary
             img_name = line.replace( '\n', '' )
             # then the next lines are the image grey pixels value
@@ -112,11 +115,11 @@ def read_images( test_file_name ) :
             # initiate an matrix in a vector to put the image in
             img = [0 for i in range( len( image_row ) * len( image_row ) )]
             # for each row of the image
-            for row in range( len( image_row ) ):
+            for row in range( len( image_row ) ) :
                 # convert string values on the line to integers
                 image_row = [int( x ) for x in line.split()]
                 # for each pixels on the row
-                for colum in range( len( image_row ) ):
+                for colum in range( len( image_row ) ) :
                     # convert the value to float and divide it to make suitable
                     # and store it in the matrix
                     img[row * len( image_row ) + colum] = float(image_row[colum])/32.
@@ -129,7 +132,7 @@ def read_images( test_file_name ) :
     # return the dictionary containing images name and they representation
     return images
 
-def read_facit( facit_file_name ):
+def read_facit( facit_file_name ) :
     """
     Get the answer of a test from a file and store it in a dictionary
     
@@ -143,7 +146,7 @@ def read_facit( facit_file_name ):
     # for each line
     for line in facit_f :
         # if the line contains a image name and the answer
-        if line.startswith( "I" ):
+        if line.startswith( "I" ) :
             # get the words on the line
             words = line.split()
             # create an entry in the dictionary with the image name
@@ -174,11 +177,11 @@ if __name__ == "__main__" :
         
         error_rate = 100.
         prev_error = 0.
-        # while the error rate is high
         print( "# training phase" )
+        # while the error rate is high
         while error_rate > 20. :
             # train the network for a subset
-            ann.train( training_subset[0], facit, learning_rate=.005 )
+            ann.train( training_subset[0], facit )
             sum_error, sum_total = 0., 0.
             # test the performance
             res_test = ann.recognize( training_subset[1] )
@@ -187,7 +190,11 @@ if __name__ == "__main__" :
                 if int(facit[face]) != int(res_test[face]) :
                     sum_error += 1.
             # update error rate
-            error = (sum_error / sum_total) * 100
+            if sum_total > 0. :
+                error = (sum_error / sum_total) * 100
+            else :
+                error = 0
+                print( "# I was here" )
             if prev_error != error :
                 prev_error = error
             # get the images for the test
