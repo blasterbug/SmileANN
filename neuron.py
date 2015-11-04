@@ -13,7 +13,7 @@ __version__ = '0.3'
 __license__ = "GNU GENERAL PUBLIC LICENSE V.2, June 1991"
 
 from math import exp
-from random import uniform
+#from random import uniform
 
 def sigmoid( t ) :
     """
