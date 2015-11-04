@@ -9,7 +9,7 @@ Generate pydoc by running :
 
 __author__ = 'Benjamin Sientzoff'
 __date__ = '23 October 2015'
-__version__ = '0.3b'
+__version__ = '0.3'
 __license__ = "GNU GENERAL PUBLIC LICENSE V.2, June 1991"
 
 from math import exp
@@ -39,7 +39,8 @@ class Neuron :
         are randomly chosen
         """
         # randomly give weight to each synapses
-        self.__synapses__ = [uniform( 0. , 1. ) for i in range( size )]
+        self.__synapses__ = [.5 for i in range( size )]
+        #self.__synapses__ = [uniform( 0. , 1. ) for i in range( size )]
         self.__bias__ = 1.
         
 
