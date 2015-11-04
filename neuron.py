@@ -8,7 +8,7 @@ Generate pydoc by running :
 """
 
 __author__ = 'Benjamin Sientzoff'
-__date__ = '23 October 2015'
+__date__ = '4 November 2015'
 __version__ = '0.3'
 __license__ = "GNU GENERAL PUBLIC LICENSE V.2, June 1991"
 

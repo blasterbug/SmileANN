@@ -15,7 +15,7 @@ Generate pydoc by running :
 """
 
 __author__ = 'Benjamin Sientzoff'
-__date__ = '22 October 2015'
+__date__ = '4 November 2015'
 __version__ = '0.2'
 __license__ = "GNU GENERAL PUBLIC LICENSE V.2, June 1991"
 
@@ -170,7 +170,7 @@ if __name__ == "__main__" :
         
         # compute size of training subsets
         tst_end = len( training_keys )
-        # run trqing for approx. 2/3 of the images and test on the 1/3 remaining
+        # run traing for approx. 70% of the images and test on the 30% remaining
         tst_start = int( tst_end * .70 )
         
         # put training subsets in an array
@@ -199,7 +199,7 @@ if __name__ == "__main__" :
                 error = (sum_error / sum_total) * 100
             else :
                 error = 0
-                print( "# I was here" )
+                print( "# Should never happen" )
             if prev_error != error :
                 prev_error = error
             # get the images for the test
@@ -211,11 +211,11 @@ if __name__ == "__main__" :
                 if int(facit[face]) != int(res_test[face]) :
                     sum_error += 1.
             error_rate = (sum_error / sum_total) * 100.
-            print( str( "# error rate :" + str(error_rate) ) )
+            print( str( "# error rate : " + str(error_rate) ) )
             # shuffle the training sets
             shuffle( training_keys )
-            training_subset[0] = {key : training_images[key] for key in training_keys[:200]}
-            training_subset[1] = {key : training_images[key] for key in training_keys[200:300]}
+            training_subset[0] = {key : training_images[key] for key in training_keys[:tst_start]}
+            training_subset[1] = {key : training_images[key] for key in training_keys[tst_start:tst_end]}
         
          # get the images for the test
         test_images = read_images( sys.argv[3] )
