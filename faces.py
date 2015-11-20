@@ -170,8 +170,8 @@ if __name__ == "__main__" :
         
         # compute size of training subsets
         tst_end = len( training_keys )
-        # run traing for approx. 70% of the images and test on the 30% remaining
-        tst_start = int( tst_end * .70 )
+        # run traing for approx. 80% of the images and test on the 30% remaining
+        tst_start = int( tst_end * .80 )
         
         # put training subsets in an array
         training_subset = [{}, {}]
@@ -202,9 +202,7 @@ if __name__ == "__main__" :
                 print( "# Should never happen" )
             if prev_error != error :
                 prev_error = error
-            # get the images for the test
-            test = read_images( sys.argv[3] )
-            res_test = ann.recognize( test )
+            res_test = ann.recognize( training_subset[1] )
             sum_error, sum_total = 0., 0.
             for face in res_test :
                 sum_total += 1.
