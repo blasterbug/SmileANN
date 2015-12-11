@@ -97,8 +97,6 @@ def read_images( test_file_name ) :
     line = faces_f.readline()
     # create a dictionary
     images = {}
-    sorted_keys = []
-    idx_key = 0
     # initiate a name for the first image
     #img_name = "imageX"
     # while where is lines in the file
@@ -110,7 +108,6 @@ def read_images( test_file_name ) :
         if line.startswith( 'I' ) :
             # create a new entry for the dictionary
             img_name = line.replace( '\n', '' )
-            sorted_keys.append(img_name)
             # then the next lines are the image grey pixels value
             line = faces_f.readline()
             # convert string values on the line to integers
@@ -133,7 +130,7 @@ def read_images( test_file_name ) :
         # read the next image
         line = faces_f.readline()
     # return the dictionary containing images name and they representation
-    return images,sorted_keys
+    return images
 
 def read_facit( facit_file_name ) :
     """
@@ -157,6 +154,15 @@ def read_facit( facit_file_name ) :
             facit[words[0]] = int( words[1] )
     # return the dictionary
     return facit
+    
+def sort_key_images( key1, key2 ) :
+    """
+    Sort the key for the image sets
+    :param key1: first key to compare
+    :param key2: second key to compare
+    :return: integer regarding the range between key1 and key2
+    """
+    return int( key1[5:] ) - int( key2[5:] )
 
 if __name__ == "__main__" :
     # define a help message
@@ -164,7 +170,7 @@ if __name__ == "__main__" :
     # require 3 arguments
     if 4 == len( sys.argv ) :
         # get the images for the training set
-        training_images, training_keys = read_images( sys.argv[1] )
+        training_images = read_images( sys.argv[1] )
         
         # get the answers for the training set
         facit = read_facit( sys.argv[2] )
@@ -219,13 +225,14 @@ if __name__ == "__main__" :
             training_subset[1] = {key : training_images[key] for key in training_keys[tst_start:tst_end]}
         
          # get the images for the test
-        test_images, test_keys = read_images( sys.argv[3] )
+        test_images = read_images( sys.argv[3] )
         # cognize faces
         print( "# recognize phase" )
         final = ann.recognize( test_images )
-        sorted(final, key=final.get)
+        sorted_keys = final.keys()
+        sorted_keys.sort( sort_key_images )
         # display the res, in the order as the input
-        for idx in range( len( test_keys ) ) :
-            print( str( test_keys[idx] + '  \t' + str(final[test_keys[idx]]) ) )
+        for key in sorted_keys :
+            print( str( key + '  \t' + str(final[key]) ) )
     else :
         print( help )
