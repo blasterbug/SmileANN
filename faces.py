@@ -15,8 +15,8 @@ Generate pydoc by running :
 """
 
 __author__ = 'Benjamin Sientzoff'
-__date__ = '4 November 2015'
-__version__ = '0.2'
+__date__ = '11 December 2015'
+__version__ = '1.0'
 __license__ = "GNU GENERAL PUBLIC LICENSE V.2, June 1991"
 
 # useful for stderr output
@@ -97,6 +97,8 @@ def read_images( test_file_name ) :
     line = faces_f.readline()
     # create a dictionary
     images = {}
+    sorted_keys = []
+    idx_key = 0
     # initiate a name for the first image
     #img_name = "imageX"
     # while where is lines in the file
@@ -108,6 +110,7 @@ def read_images( test_file_name ) :
         if line.startswith( 'I' ) :
             # create a new entry for the dictionary
             img_name = line.replace( '\n', '' )
+            sorted_keys.append(img_name)
             # then the next lines are the image grey pixels value
             line = faces_f.readline()
             # convert string values on the line to integers
@@ -130,7 +133,7 @@ def read_images( test_file_name ) :
         # read the next image
         line = faces_f.readline()
     # return the dictionary containing images name and they representation
-    return images
+    return images,sorted_keys
 
 def read_facit( facit_file_name ) :
     """
@@ -161,7 +164,7 @@ if __name__ == "__main__" :
     # require 3 arguments
     if 4 == len( sys.argv ) :
         # get the images for the training set
-        training_images = read_images( sys.argv[1] )
+        training_images, training_keys = read_images( sys.argv[1] )
         
         # get the answers for the training set
         facit = read_facit( sys.argv[2] )
@@ -216,13 +219,13 @@ if __name__ == "__main__" :
             training_subset[1] = {key : training_images[key] for key in training_keys[tst_start:tst_end]}
         
          # get the images for the test
-        test_images = read_images( sys.argv[3] )
-        
+        test_images, test_keys = read_images( sys.argv[3] )
         # cognize faces
-        final = ann.recognize( test_images )
-        # display the res
         print( "# recognize phase" )
-        for face in final :
-            print( str( face + '  \t' + str(final[face]) ) )
+        final = ann.recognize( test_images )
+        sorted(final, key=final.get)
+        # display the res, in the order as the input
+        for idx in range( len( test_keys ) ) :
+            print( str( test_keys[idx] + '  \t' + str(final[test_keys[idx]]) ) )
     else :
         print( help )
