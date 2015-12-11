@@ -60,8 +60,9 @@ if __name__ == "__main__" :
     res1 = read_facit( sys.argv[1] )
     res2 = read_facit( sys.argv[2] )
     diff, rate = cmp_res( res1, res2 )
+    print( "Image \t\t" + sys.argv[1] + "\t" + sys.argv[2] )
     for k in diff :
-        print( str( k + "  \t" + str( diff[k] ) ) )
+        print( str( k + "  \t" + str( diff[k][0] ) + "\t" + str( diff[k][1] ) ) )
         #print( str( k + "  \t" + diff[k][0] + "\t" + diff[k][0] ) )
-    print( rate )
+    print( str("Error rate : ") + str( rate ) )
 
