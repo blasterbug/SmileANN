@@ -155,7 +155,7 @@ def read_facit( facit_file_name ) :
     # return the dictionary
     return facit
     
-def sort_key_images( key1, key2 ) :
+def compare_images_key( key1, key2 ) :
     """
     Sort the key for the image sets
     :param key1: first key to compare
@@ -163,6 +163,28 @@ def sort_key_images( key1, key2 ) :
     :return: integer regarding the range between key1 and key2
     """
     return int( key1[5:] ) - int( key2[5:] )
+    
+def cmp_to_key( comparator ):
+    """
+    Convert a cmp= function into a key= function
+    :param comparator: function to compare keys
+    """
+    class K:
+        def __init__(self, obj, *args):
+            self.obj = obj
+        def __lt__(self, other):
+            return comparator(self.obj, other.obj) < 0
+        def __gt__(self, other):
+            return comparator(self.obj, other.obj) > 0
+        def __eq__(self, other):
+            return comparator(self.obj, other.obj) == 0
+        def __le__(self, other):
+            return comparator(self.obj, other.obj) <= 0
+        def __ge__(self, other):
+            return comparator(self.obj, other.obj) >= 0
+        def __ne__(self, other):
+            return comparator(self.obj, other.obj) != 0
+    return K
 
 if __name__ == "__main__" :
     # define a help message
@@ -229,8 +251,7 @@ if __name__ == "__main__" :
         # cognize faces
         print( "# recognize phase" )
         final = ann.recognize( test_images )
-        sorted_keys = final.keys()
-        sorted_keys.sort( sort_key_images )
+        sorted_keys = sorted( final, key=cmp_to_key( compare_images_key ) )
         # display the res, in the order as the input
         for key in sorted_keys :
             print( str( key + '  \t' + str(final[key]) ) )
